@@ -1,17 +1,18 @@
 import theme from "@assets/theme";
-import { Header } from "@components/Header";
+import { ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 
-export function Groups() {
+export function Loading() {
   return (
     <Container>
-      <Header />
+      <ActivityIndicator color={theme.colors.green_700} />
     </Container>
   );
 }
 
 const Container = styled.View`
   flex: 1;
+  justify-content: center;
+  align-items: center;
   background-color: ${theme.colors.gray_600};
-  padding: 24px;
 `;
