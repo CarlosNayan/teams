@@ -33,9 +33,9 @@ const Title = styled.Text`
   font-size: ${theme.font_size.md}px;
 `;
 
-const Icon = styled(UsersThree).attrs((props: { theme: DefaultTheme }) => ({
+const Icon = styled(UsersThree).attrs(() => ({
   size: 32,
-  color: props.theme.colors.green_700,
+  color: theme.colors.green_700,
   weight: "fill",
 }))`
   margin-right: 20px;
