@@ -1,13 +1,13 @@
-import theme from "@assets/theme";
+import theme from "src/theme";
 import styled from "styled-components/native";
-import logoImg from "@assets/logo.png";
+import logoImg from "@assets/Logo/logo.png";
 import { CaretLeft } from "phosphor-react-native";
 
-interface IHeaderProps {
+interface Props {
   showBackButton?: boolean;
 }
 
-export function Header({ showBackButton = false }: IHeaderProps) {
+export function Header({ showBackButton = false }: Props) {
   return (
     <Container>
       {showBackButton && (

@@ -17,8 +17,8 @@ export default {
     red_dark: "#AA2834",
   },
   font_family: {
-    regular: "Inter_400Regular",
-    bold: "Inter_700Bold",
+    regular: "Roboto_400Regular",
+    bold: "Roboto_700Bold",
   },
   font_size: {
     sm: 14,

@@ -6,7 +6,7 @@ import {
 } from "@expo-google-fonts/roboto";
 import { Groups } from "@screens/Groups";
 import { StatusBar } from "expo-status-bar";
-import theme from "src/assets/theme";
+import theme from "src/theme";
 import { ThemeProvider } from "styled-components";
 
 export default function App() {
