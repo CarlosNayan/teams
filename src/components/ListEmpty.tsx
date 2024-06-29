@@ -2,38 +2,29 @@ import theme from "@assets/theme";
 import styled from "styled-components/native";
 
 interface Props {
-  title: string;
-  subTitle: string;
+  message: string;
 }
 
-export function HighLight({ title, subTitle }: Props) {
+export function ListEmpty({ message }: Props) {
   return (
     <Container>
-      <Title>{title}</Title>
-      <SubTitle>{subTitle}</SubTitle>
+      <Title>{message}</Title>
     </Container>
   );
 }
 
 const Container = styled.SafeAreaView`
-  width: 100%;
+  flex: 1;
   justify-content: center;
   align-items: center;
-  flex-direction: column;
-  margin: 32px 0;
+  flex-direction: row;
   background-color: ${theme.colors.gray_600};
+  margin: 32px 0;
 `;
 
 const Title = styled.Text`
-  color: ${theme.colors.white};
-  text-align: center;
-  font-family: ${theme.font_family.bold};
-  font-size: ${theme.font_size.xl}px;
-`;
-
-const SubTitle = styled.Text`
   color: ${theme.colors.gray_300};
   text-align: center;
   font-family: ${theme.font_family.regular};
-  font-size: ${theme.font_size.md}px;
+  font-size: ${theme.font_size.sm}px;
 `;

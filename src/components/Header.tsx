@@ -1,4 +1,4 @@
-import theme from "src/theme";
+import theme from "@assets/theme";
 import styled from "styled-components/native";
 import logoImg from "@assets/Logo/logo.png";
 import { CaretLeft } from "phosphor-react-native";

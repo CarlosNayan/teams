@@ -1,4 +1,4 @@
-import theme from "src/theme";
+import theme from "@assets/theme";
 import { ActivityIndicator } from "react-native";
 import styled from "styled-components/native";
 

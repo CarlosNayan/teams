@@ -1,4 +1,4 @@
-import theme from "src/theme";
+import theme from "@assets/theme";
 import { TouchableOpacity, TouchableOpacityProps } from "react-native";
 import styled, { DefaultTheme } from "styled-components/native";
 import { UsersThree } from "phosphor-react-native";
