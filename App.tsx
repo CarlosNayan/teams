@@ -8,6 +8,7 @@ import { NewGroup } from "@screens/NewGroup";
 import { StatusBar } from "expo-status-bar";
 import theme from "@assets/theme";
 import { ThemeProvider } from "styled-components";
+import { Players } from "@screens/Players";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -18,7 +19,7 @@ export default function App() {
   return (
     <ThemeProvider theme={theme}>
       <StatusBar style="light" translucent />
-      {fontsLoaded ? <NewGroup /> : <Loading />}
+      {fontsLoaded ? <Players /> : <Loading />}
     </ThemeProvider>
   );
 }

@@ -15,7 +15,7 @@ const Container = styled(TextInput).attrs(() => ({
   background-color: ${theme.colors.gray_700};
   border-radius: 6px;
   padding: 16px;
-  margin-bottom: 12px;
   font-family: ${theme.font_family.regular};
   font-size: ${theme.font_size.md};
+  color: ${theme.colors.gray_200};
 `;
