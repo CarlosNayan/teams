@@ -21,7 +21,6 @@ const Container = styled(TouchableOpacity)`
   max-height: 56px;
   justify-content: center;
   align-items: center;
-  margin-right: 12px;
 `;
 
 const Icon = styled(MaterialIcons).attrs(({ type }: Props) => ({
