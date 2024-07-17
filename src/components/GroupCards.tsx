@@ -30,7 +30,7 @@ const Container = styled(TouchableOpacity)`
 const Title = styled.Text`
   color: ${theme.colors.gray_200};
   font-family: ${theme.font_family.regular};
-  font-size: ${theme.font_size.md}px;
+  font-size: ${theme.font_size.md};
 `;
 
 const Icon = styled(UsersThree).attrs(() => ({

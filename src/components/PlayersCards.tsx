@@ -34,7 +34,7 @@ const Name = styled.Text`
   flex: 1;
   color: ${theme.colors.gray_200};
   font-family: ${theme.font_family.regular};
-  font-size: ${theme.font_size.md}px;
+  font-size: ${theme.font_size.md};
 `;
 
 const PlayerIcon = styled(MaterialIcons).attrs(() => ({

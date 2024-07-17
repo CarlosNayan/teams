@@ -26,5 +26,5 @@ const Title = styled.Text`
   color: ${theme.colors.gray_300};
   text-align: center;
   font-family: ${theme.font_family.regular};
-  font-size: ${theme.font_size.sm}px;
+  font-size: ${theme.font_size.sm};
 `;

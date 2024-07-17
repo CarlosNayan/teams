@@ -28,12 +28,12 @@ const Title = styled.Text`
   color: ${theme.colors.white};
   text-align: center;
   font-family: ${theme.font_family.bold};
-  font-size: ${theme.font_size.xl}px;
+  font-size: ${theme.font_size.xl};
 `;
 
 const SubTitle = styled.Text`
   color: ${theme.colors.gray_300};
   text-align: center;
   font-family: ${theme.font_family.regular};
-  font-size: ${theme.font_size.md}px;
+  font-size: ${theme.font_size.md};
 `;

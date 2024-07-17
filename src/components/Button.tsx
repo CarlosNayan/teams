@@ -29,5 +29,5 @@ const Container = styled(TouchableOpacity)`
 const Title = styled.Text`
   color: ${theme.colors.white};
   font-family: ${theme.font_family.bold};
-  font-size: ${theme.font_size.md}px;
+  font-size: ${theme.font_size.md};
 `;

@@ -84,5 +84,5 @@ const HeaderList = styled.View`
 const NumbersOfPlayers = styled.Text`
   color: ${theme.colors.gray_200};
   font-family: ${theme.font_family.bold};
-  font-size: ${theme.font_size.sm}px;
+  font-size: ${theme.font_size.sm};
 `;

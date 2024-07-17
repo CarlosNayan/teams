@@ -30,7 +30,7 @@ const Container = styled(TouchableOpacity)`
 
 const Title = styled.Text`
   font-family: ${theme.font_family.bold};
-  font-size: ${theme.font_size.sm}px;
+  font-size: ${theme.font_size.sm};
   color: ${theme.colors.gray_200};
   text-transform: uppercase;
 `;
