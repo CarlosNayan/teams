@@ -1,12 +1,26 @@
 import theme from "@assets/theme";
-import { Header } from "@components/Header";
-import styled from "styled-components/native";
-import { UsersThree } from "phosphor-react-native";
-import { HighLight } from "@components/HighLight";
 import { Button } from "@components/Button";
+import { Header } from "@components/Header";
+import { HighLight } from "@components/HighLight";
 import { Input } from "@components/Input";
+import { useNavigation } from "@react-navigation/native";
+import { UsersThree } from "phosphor-react-native";
+import { useState } from "react";
+import { Alert } from "react-native";
+import styled from "styled-components/native";
 
 export function NewGroup() {
+  const [group, setGroup] = useState("");
+
+  const navigate = useNavigation();
+
+  function handleNewGroup() {
+    if (group.length === 0)
+      return Alert.alert("Novo Grupo", "Por favor, informe o nome da turma");
+    
+    navigate.navigate("players", { group });
+  }
+
   return (
     <Container>
       <Header showBackButton />
@@ -16,8 +30,12 @@ export function NewGroup() {
           title="Nova turma"
           subTitle="crie uma turma para adicionar as pessoas"
         />
-        <Input placeholder="Nome da turma" />
-        <Button title="Criar" style={{ marginTop: 10 }} />
+        <Input placeholder="Nome da turma" onChangeText={setGroup} />
+        <Button
+          title="Criar"
+          style={{ marginTop: 10 }}
+          onPress={handleNewGroup}
+        />
       </Content>
     </Container>
   );

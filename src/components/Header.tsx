@@ -2,16 +2,24 @@ import theme from "@assets/theme";
 import styled from "styled-components/native";
 import logoImg from "@assets/Logo/logo.png";
 import { CaretLeft } from "phosphor-react-native";
+import { useNavigation } from "@react-navigation/native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 interface Props {
   showBackButton?: boolean;
 }
 
 export function Header({ showBackButton = false }: Props) {
+  const navigation = useNavigation();
+
+  function hadleGoBack() {
+    navigation.navigate("groups");
+  }
+
   return (
     <Container>
       {showBackButton && (
-        <BackButton>
+        <BackButton onPress={hadleGoBack}>
           <BackIcon />
         </BackButton>
       )}
@@ -20,7 +28,7 @@ export function Header({ showBackButton = false }: Props) {
   );
 }
 
-const Container = styled.SafeAreaView`
+const Container = styled(SafeAreaView)`
   width: 100%;
   justify-content: center;
   align-items: center;

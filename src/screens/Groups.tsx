@@ -1,16 +1,17 @@
 import theme from "@assets/theme";
+import { Button } from "@components/Button";
 import { GroupCards } from "@components/GroupCards";
 import { Header } from "@components/Header";
 import { HighLight } from "@components/HighLight";
-import styled from "styled-components/native";
+import { ListEmpty } from "@components/ListEmpty";
+import { useNavigation } from "@react-navigation/native";
 import { useState } from "react";
 import { FlatList } from "react-native";
-import { ListEmpty } from "@components/ListEmpty";
-import { Button } from "@components/Button";
-import { useNavigation } from "@react-navigation/native";
+import styled from "styled-components/native";
 
 export function Groups() {
   const [groups, setGourps] = useState<string[] | []>([]);
+
   const navigation = useNavigation();
 
   function handleNewGroup() {

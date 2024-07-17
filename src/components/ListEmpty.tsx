@@ -1,4 +1,5 @@
 import theme from "@assets/theme";
+import { SafeAreaView } from "react-native-safe-area-context";
 import styled from "styled-components/native";
 
 interface Props {
@@ -13,7 +14,7 @@ export function ListEmpty({ message }: Props) {
   );
 }
 
-const Container = styled.SafeAreaView`
+const Container = styled(SafeAreaView)`
   flex: 1;
   justify-content: center;
   align-items: center;
