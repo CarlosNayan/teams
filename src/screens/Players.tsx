@@ -7,7 +7,8 @@ import { HighLight } from "@components/HighLight";
 import { Input } from "@components/Input";
 import { ListEmpty } from "@components/ListEmpty";
 import { PlayersCards } from "@components/PlayersCards";
-import { useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
+import { groupDelete } from "@storage/group/groupDelete";
 import { useState } from "react";
 import { FlatList } from "react-native";
 import styled from "styled-components/native";
@@ -19,8 +20,20 @@ type props = {
 export function Players() {
   const { group } = useRoute().params as props;
 
+  const navigate = useNavigation();
+
   const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
   const [players, setPlayers] = useState<string[]>([]);
+
+  async function handleDeleteGroup() {
+    try {
+      await groupDelete(group);
+      navigate.navigate("groups");
+    } catch (error) {
+      console.error("[Players.tsx > handleDeleteGroup]", error);
+      throw error;
+    }
+  }
 
   return (
     <Container>
@@ -64,7 +77,7 @@ export function Players() {
         type="SECONDARY"
         title="Remover turma"
         style={{ marginTop: 10 }}
-        onPress={() => ""}
+        onPress={handleDeleteGroup}
       />
     </Container>
   );

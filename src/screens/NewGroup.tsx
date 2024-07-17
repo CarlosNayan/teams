@@ -4,6 +4,7 @@ import { Header } from "@components/Header";
 import { HighLight } from "@components/HighLight";
 import { Input } from "@components/Input";
 import { useNavigation } from "@react-navigation/native";
+import { groupCreate } from "@storage/group/groupCreate";
 import { UsersThree } from "phosphor-react-native";
 import { useState } from "react";
 import { Alert } from "react-native";
@@ -14,11 +15,18 @@ export function NewGroup() {
 
   const navigate = useNavigation();
 
-  function handleNewGroup() {
-    if (group.length === 0)
-      return Alert.alert("Novo Grupo", "Por favor, informe o nome da turma");
-    
-    navigate.navigate("players", { group });
+  async function handleNewGroup() {
+    try {
+      if (group.length === 0)
+        return Alert.alert("Novo Grupo", "Por favor, informe o nome da turma");
+
+      await groupCreate(group);
+
+      navigate.navigate("players", { group });
+    } catch (error) {
+      console.error("[NewGroup.tsx > handleNewGroup]", error);
+      throw error;
+    }
   }
 
   return (
