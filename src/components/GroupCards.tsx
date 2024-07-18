@@ -1,7 +1,7 @@
 import theme from "@assets/theme";
-import { TouchableOpacity, TouchableOpacityProps } from "react-native";
-import styled, { DefaultTheme } from "styled-components/native";
 import { UsersThree } from "phosphor-react-native";
+import { TouchableOpacity, TouchableOpacityProps } from "react-native";
+import styled from "styled-components/native";
 
 interface Props extends TouchableOpacityProps {
   title: string;

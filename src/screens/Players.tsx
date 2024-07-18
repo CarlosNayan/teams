@@ -9,8 +9,10 @@ import { ListEmpty } from "@components/ListEmpty";
 import { PlayersCards } from "@components/PlayersCards";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { groupDelete } from "@storage/group/groupDelete";
+import { playerAddByGroup } from "@storage/player/playersAddByGroup";
+import { CustomError } from "@utils/CustomError";
 import { useState } from "react";
-import { FlatList } from "react-native";
+import { Alert, FlatList } from "react-native";
 import styled from "styled-components/native";
 
 type props = {
@@ -22,8 +24,34 @@ export function Players() {
 
   const navigate = useNavigation();
 
-  const [selectedTeam, setSelectedTeam] = useState<string | null>(null);
+  const [selectedTeam, setSelectedTeam] = useState<string>("Time A");
   const [players, setPlayers] = useState<string[]>([]);
+  const [newPlayerName, setNewPlayerName] = useState("");
+
+  async function handleAddPlayer() {
+    if (newPlayerName.trim().length === 0)
+      Alert.alert("Novo Jogador", "Por favor, informe o nome do jogador");
+    const newPlayer = {
+      id: new Date().getTime().toString(),
+      name: newPlayerName.trim(),
+      team: selectedTeam,
+    };
+
+    try {
+      await playerAddByGroup(newPlayer, group);
+      setNewPlayerName("");
+      // fetchPlayersByTeam();
+    } catch (error) {
+      console.error("[Players.tsx > handleAddPlayer]", error);
+      if (error instanceof CustomError) {
+        return Alert.alert("Novo Jogador", error.message);
+      }
+      return Alert.alert(
+        "Novo Jogador",
+        "Não foi possível adicionar o jogador"
+      );
+    }
+  }
 
   async function handleDeleteGroup() {
     try {
@@ -40,12 +68,16 @@ export function Players() {
       <Header showBackButton />
       <HighLight title={group} subTitle="Adicione a galera e separe os times" />
       <Form>
-        <Input placeholder="Nome da pessoa" autoCorrect={false} />
-        <ButtonIcon icon="add" />
+        <Input
+          placeholder="Nome da pessoa"
+          autoCorrect={false}
+          onChangeText={setNewPlayerName}
+        />
+        <ButtonIcon icon="add" onPress={handleAddPlayer} />
       </Form>
       <HeaderList>
         <FlatList
-          data={["Time A", "Time B", "Time C"]}
+          data={["Time A", "Time B"]}
           keyExtractor={(item) => item}
           renderItem={({ item }) => (
             <Filter

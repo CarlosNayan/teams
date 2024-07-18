@@ -5,19 +5,36 @@ import { HighLight } from "@components/HighLight";
 import { Input } from "@components/Input";
 import { useNavigation } from "@react-navigation/native";
 import { groupCreate } from "@storage/group/groupCreate";
+import { CustomError } from "@utils/CustomError";
 import { UsersThree } from "phosphor-react-native";
-import { useState } from "react";
-import { Alert } from "react-native";
+import { useEffect, useState } from "react";
+import { Alert, Keyboard, Platform } from "react-native";
 import styled from "styled-components/native";
 
 export function NewGroup() {
   const [group, setGroup] = useState("");
+  const [keyboardIsVisible, setKeyboardIsVisible] = useState(false);
+
+  useEffect(() => {
+    const showSubscription = Keyboard.addListener("keyboardDidShow", () => {
+      setKeyboardIsVisible(true);
+    });
+
+    const hideSubscription = Keyboard.addListener("keyboardDidHide", () => {
+      setKeyboardIsVisible(false);
+    });
+
+    return () => {
+      showSubscription.remove();
+      hideSubscription.remove();
+    };
+  }, []);
 
   const navigate = useNavigation();
 
   async function handleNewGroup() {
     try {
-      if (group.length === 0)
+      if (group.trim().length === 0)
         return Alert.alert("Novo Grupo", "Por favor, informe o nome da turma");
 
       await groupCreate(group);
@@ -25,12 +42,16 @@ export function NewGroup() {
       navigate.navigate("players", { group });
     } catch (error) {
       console.error("[NewGroup.tsx > handleNewGroup]", error);
-      throw error;
+      if (error instanceof CustomError) {
+        return Alert.alert("Novo Grupo", error.message);
+      } else {
+        return Alert.alert("Novo Grupo", "Não foi possível criar o grupo");
+      }
     }
   }
 
   return (
-    <Container>
+    <Container keyboardIsVisible={keyboardIsVisible} Platform={Platform.OS}>
       <Header showBackButton />
       <Content>
         <Icon />
@@ -53,6 +74,13 @@ const Container = styled.View`
   flex: 1;
   background-color: ${theme.colors.gray_600};
   padding: 24px;
+  padding-bottom: ${({
+    keyboardIsVisible,
+    Platform,
+  }: {
+    keyboardIsVisible: boolean;
+    Platform: string;
+  }) => (keyboardIsVisible && Platform === "ios" ? 400 : 24)}px;
 `;
 
 const Content = styled.View`
