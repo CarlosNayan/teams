@@ -35,7 +35,7 @@ export function NewGroup() {
   async function handleNewGroup() {
     try {
       if (group.trim().length === 0)
-        return Alert.alert("Novo Grupo", "Por favor, informe o nome da turma");
+        return Alert.alert("Novo turma", "Por favor, informe o nome da turma");
 
       await groupCreate(group);
 
@@ -43,9 +43,9 @@ export function NewGroup() {
     } catch (error) {
       console.error("[NewGroup.tsx > handleNewGroup]", error);
       if (error instanceof CustomError) {
-        return Alert.alert("Novo Grupo", error.message);
+        return Alert.alert("Novo turma", error.message);
       } else {
-        return Alert.alert("Novo Grupo", "Não foi possível criar o grupo");
+        return Alert.alert("Novo turma", "Não foi possível criar a turma");
       }
     }
   }

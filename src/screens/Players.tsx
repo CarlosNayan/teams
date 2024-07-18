@@ -6,6 +6,7 @@ import { Header } from "@components/Header";
 import { HighLight } from "@components/HighLight";
 import { Input } from "@components/Input";
 import { ListEmpty } from "@components/ListEmpty";
+import { Loading } from "@components/Loading";
 import { PlayersCards } from "@components/PlayersCards";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { groupDelete } from "@storage/group/groupDelete";
@@ -30,12 +31,21 @@ export function Players() {
   const [selectedTeam, setSelectedTeam] = useState<string>("Time A");
   const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
   const [newPlayerName, setNewPlayerName] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   const newPlayerNameInputRef = React.useRef<TextInput>(null);
 
   async function fetchPlayersByTeam() {
-    const playersByTeam = await playersGetByGroupAndTeam(group, selectedTeam);
-    setPlayers(playersByTeam);
+    try {
+      setIsLoading(true);
+      const playersByTeam = await playersGetByGroupAndTeam(group, selectedTeam);
+      setPlayers(playersByTeam);
+    } catch (error) {
+      console.error("[Players.tsx > fetchPlayersByTeam]", error);
+      throw error;
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   async function handleAddPlayer() {
@@ -76,7 +86,7 @@ export function Players() {
 
   async function handleDeleteGroup() {
     try {
-      Alert.alert("Deletar Grupo", "Tem certeza que deseja excluir o grupo?", [
+      Alert.alert("Deletar turma", "Tem certeza que deseja excluir a turma?", [
         {
           text: "Não",
           style: "cancel",
@@ -92,9 +102,9 @@ export function Players() {
     } catch (error) {
       console.error("[Players.tsx > handleDeleteGroup]", error);
 
-      Alert.alert("Deletar Grupo", "Não foi possível deletar o grupo");
+      Alert.alert("Deletar turma", "Não foi possível deletar a turma");
 
-      throw new CustomError("Não foi possível deletar o grupo");
+      throw error;
     }
   }
 
@@ -108,7 +118,7 @@ export function Players() {
 
       Alert.alert("Remover Jogador", "Não foi possível remover o jogador");
 
-      throw new CustomError("Não foi possível remover o jogador");
+      throw error;
     }
   }
 
@@ -147,24 +157,28 @@ export function Players() {
         />
         <NumbersOfPlayers>{players.length} pessoas</NumbersOfPlayers>
       </HeaderList>
-      <FlatList
-        data={players}
-        keyExtractor={(item) => `${item.name}-${item.team}`}
-        renderItem={({ item }) => (
-          <PlayersCards
-            name={item.name}
-            onRemove={() => handleRemovePlayer(item.id)}
-          />
-        )}
-        showsVerticalScrollIndicator={false}
-        ListEmptyComponent={() => (
-          <ListEmpty message="Não há pessoas nessa turma" />
-        )}
-        contentContainerStyle={{
-          paddingBottom: 68,
-          flex: players.length === 0 ? 1 : 0,
-        }}
-      />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <FlatList
+          data={players}
+          keyExtractor={(item) => `${item.name}-${item.team}`}
+          renderItem={({ item }) => (
+            <PlayersCards
+              name={item.name}
+              onRemove={() => handleRemovePlayer(item.id)}
+            />
+          )}
+          showsVerticalScrollIndicator={false}
+          ListEmptyComponent={() => (
+            <ListEmpty message="Não há pessoas nessa turma" />
+          )}
+          contentContainerStyle={{
+            paddingBottom: 68,
+            flex: players.length === 0 ? 1 : 0,
+          }}
+        />
+      )}
       <Button
         type="SECONDARY"
         title="Remover turma"
