@@ -9,10 +9,13 @@ import { ListEmpty } from "@components/ListEmpty";
 import { PlayersCards } from "@components/PlayersCards";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { groupDelete } from "@storage/group/groupDelete";
+import { playerRemoveByGroup } from "@storage/player/playerRemoveByGroup";
 import { playerAddByGroup } from "@storage/player/playersAddByGroup";
+import { playersGetByGroupAndTeam } from "@storage/player/playersGetByGroupAndTeam";
+import { PlayerStorageDTO } from "@storage/player/PlayersStorageDTO";
 import { CustomError } from "@utils/CustomError";
-import { useState } from "react";
-import { Alert, FlatList } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Alert, FlatList, TextInput } from "react-native";
 import styled from "styled-components/native";
 
 type props = {
@@ -25,12 +28,23 @@ export function Players() {
   const navigate = useNavigation();
 
   const [selectedTeam, setSelectedTeam] = useState<string>("Time A");
-  const [players, setPlayers] = useState<string[]>([]);
+  const [players, setPlayers] = useState<PlayerStorageDTO[]>([]);
   const [newPlayerName, setNewPlayerName] = useState("");
+
+  const newPlayerNameInputRef = React.useRef<TextInput>(null);
+
+  async function fetchPlayersByTeam() {
+    const playersByTeam = await playersGetByGroupAndTeam(group, selectedTeam);
+    setPlayers(playersByTeam);
+  }
 
   async function handleAddPlayer() {
     if (newPlayerName.trim().length === 0)
-      Alert.alert("Novo Jogador", "Por favor, informe o nome do jogador");
+      return Alert.alert(
+        "Novo Jogador",
+        "Por favor, informe o nome do jogador"
+      );
+
     const newPlayer = {
       id: new Date().getTime().toString(),
       name: newPlayerName.trim(),
@@ -39,13 +53,20 @@ export function Players() {
 
     try {
       await playerAddByGroup(newPlayer, group);
+
       setNewPlayerName("");
-      // fetchPlayersByTeam();
+
+      newPlayerNameInputRef.current?.blur();
+      // Keyboard.dismiss();
+
+      fetchPlayersByTeam();
     } catch (error) {
       console.error("[Players.tsx > handleAddPlayer]", error);
+
       if (error instanceof CustomError) {
         return Alert.alert("Novo Jogador", error.message);
       }
+
       return Alert.alert(
         "Novo Jogador",
         "Não foi possível adicionar o jogador"
@@ -55,13 +76,45 @@ export function Players() {
 
   async function handleDeleteGroup() {
     try {
-      await groupDelete(group);
-      navigate.navigate("groups");
+      Alert.alert("Deletar Grupo", "Tem certeza que deseja excluir o grupo?", [
+        {
+          text: "Não",
+          style: "cancel",
+        },
+        {
+          text: "Sim",
+          onPress: async () => {
+            await groupDelete(group);
+            navigate.navigate("groups");
+          },
+        },
+      ]);
     } catch (error) {
       console.error("[Players.tsx > handleDeleteGroup]", error);
-      throw error;
+
+      Alert.alert("Deletar Grupo", "Não foi possível deletar o grupo");
+
+      throw new CustomError("Não foi possível deletar o grupo");
     }
   }
+
+  async function handleRemovePlayer(playerId: string) {
+    try {
+      await playerRemoveByGroup(playerId, group);
+
+      fetchPlayersByTeam();
+    } catch (error) {
+      console.error("[Players.tsx > handleRemovePlayer]", error);
+
+      Alert.alert("Remover Jogador", "Não foi possível remover o jogador");
+
+      throw new CustomError("Não foi possível remover o jogador");
+    }
+  }
+
+  useEffect(() => {
+    fetchPlayersByTeam();
+  }, [selectedTeam]);
 
   return (
     <Container>
@@ -69,9 +122,13 @@ export function Players() {
       <HighLight title={group} subTitle="Adicione a galera e separe os times" />
       <Form>
         <Input
+          inputRef={newPlayerNameInputRef}
+          value={newPlayerName}
           placeholder="Nome da pessoa"
           autoCorrect={false}
           onChangeText={setNewPlayerName}
+          onSubmitEditing={handleAddPlayer}
+          returnKeyType="done"
         />
         <ButtonIcon icon="add" onPress={handleAddPlayer} />
       </Form>
@@ -92,9 +149,12 @@ export function Players() {
       </HeaderList>
       <FlatList
         data={players}
-        keyExtractor={(item) => item}
+        keyExtractor={(item) => `${item.name}-${item.team}`}
         renderItem={({ item }) => (
-          <PlayersCards name={item} onRemove={() => {}} />
+          <PlayersCards
+            name={item.name}
+            onRemove={() => handleRemovePlayer(item.id)}
+          />
         )}
         showsVerticalScrollIndicator={false}
         ListEmptyComponent={() => (
